@@ -1,0 +1,7 @@
+zwaveManufacturer:
+  - id: 0086/0003/000B
+    deviceLabel: Aeon Smart Strip
+    manufacturerId: 0x0086
+    productType: 0x0003
+    productId: 0x000B
+    deviceProfileName: dsc11-smart-strip

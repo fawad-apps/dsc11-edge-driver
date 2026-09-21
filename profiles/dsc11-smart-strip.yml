@@ -1,0 +1,179 @@
+# Same shape as upstream's metering-switch-5: the strip plus its four
+# switchable outlets, each with switch + power + energy.
+#
+# Component ids are deliberately left unlabelled. switch1..switch4 are the
+# device's switch endpoints 1..4; which physical socket each one drives has
+# NOT been measured yet (plan probe P5). Do not add labels like "Tower" until
+# it has, or every reading is mislabelled forever.
+#
+# The DSC11's two ALWAYS-ON sockets appear here as alwaysOn1 and alwaysOn2.
+# CONFIRMED ON HARDWARE: the strip meters all six sockets. Meter endpoints 1-2
+# are the always-on pair and 3-6 are the switchable four, which is precisely
+# why meter traffic is offset by two. They carry powerMeter and energyMeter
+# but deliberately NO switch -- nothing can switch them, and offering a
+# control that cannot work would be worse than offering none.
+#
+# powerConsumptionReport is what SmartThings Energy reads -- energyMeter alone
+# does not reach it. It is declared on every component so per-outlet
+# consumption lands there too, not just the strip total.
+#
+# autumnpepper05038.energyreset exists because THE APP WILL NOT DRAW THE
+# STANDARD ONE. energyMeter's own presentation declares a "Energy meter reset"
+# pushButton, and the platform serves it unconditionally -- but the app
+# substitutes its own energy card (the one with the history graph) for
+# powerMeter/energyMeter, and the generic controls that belong to them,
+# including that button, are never rendered. Verified against the live device
+# presentation. This custom capability is a button the app does
+# draw; it calls the same handler.
+name: dsc11-smart-strip
+components:
+  - id: main
+    capabilities:
+      - id: switch
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: SmartPlug
+  - id: switch1
+    capabilities:
+      - id: switch
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch2
+    capabilities:
+      - id: switch
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch3
+    capabilities:
+      - id: switch
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+  - id: switch4
+    capabilities:
+      - id: switch
+        version: 1
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+      - id: refresh
+        version: 1
+    categories:
+      - name: Switch
+
+  - id: alwaysOn1
+    capabilities:
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+    categories:
+      - name: SmartPlug
+  - id: alwaysOn2
+    capabilities:
+      - id: powerMeter
+        version: 1
+      - id: energyMeter
+        version: 1
+      - id: powerConsumptionReport
+        version: 1
+      - id: autumnpepper05038.energyreset
+        version: 1
+    categories:
+      - name: SmartPlug
+
+# Defaults below MIRROR src/preferences.lua, which is the source of truth --
+# it is what configure() actually sends. If the two ever disagree, Lua wins.
+#
+# The thresholds are deliberately group-wide rather than per-outlet. The strip
+# has five of each (5/8/9/10/11 and 12/15/16/17/18) for four outlets plus the
+# strip, and which parameter governs which outlet has not been established.
+# Naming one "Outlet 1" would encode a guess; see src/preferences.lua.
+preferences:
+  - name: "group2Time"
+    title: "Per-outlet report interval"
+    description: "Seconds between unsolicited per-outlet reports. This is what keeps per-outlet power fresh; lower is more responsive and more Z-Wave traffic. Default 90."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 30
+      maximum: 32767
+      default: 90
+  - name: "group1Time"
+    title: "Strip report interval"
+    description: "Seconds between unsolicited whole-strip reports. Default 900 (15 minutes)."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 30
+      maximum: 32767
+      default: 900
+  - name: "absoluteThreshold"
+    title: "Report threshold (watts)"
+    description: "How many watts a reading must move before the strip reports it. Applies to all outlets and the strip. Default 5."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 32767
+      default: 5
+  - name: "percentThreshold"
+    title: "Report threshold (percent)"
+    description: "How far a reading must move, in percent, before the strip reports it. Applies to all outlets and the strip. Default 50."
+    required: false
+    preferenceType: integer
+    definition:
+      minimum: 1
+      maximum: 100
+      default: 50

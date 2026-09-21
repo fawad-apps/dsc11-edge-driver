@@ -1,0 +1,5 @@
+name: 'Aeon DSC11 Smart Strip'
+packageKey: 'dsc11-smart-strip'
+permissions:
+  zwave: {}
+description: "Per-outlet switching and metering for the Aeon Labs DSC11 Smart Strip"
