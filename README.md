@@ -111,6 +111,19 @@ than offering none.
 - The [SmartThings CLI](https://github.com/SmartThingsCommunity/smartthings-cli).
 - A DSC11 already paired to your hub.
 
+> ⚠️ **If you are installing this yourself, read this first.** The profile
+> declares a custom capability for the reset button
+> (`autumnpepper05038.energyreset`). Custom capabilities belong to the account
+> that created them, and this one has not been published, so **your hub may
+> not be able to resolve it** — which can stop the profile loading at all.
+>
+> If packaging fails, or components do not appear, remove the four
+> `autumnpepper05038.energyreset` entries from
+> `profiles/dsc11-smart-strip.yml` and the `RESET_ENERGY` block from
+> `src/driver_template.lua`. Everything else works unchanged; you lose only
+> the in-app reset button, and the reset itself stays reachable from
+> automations and the API — see [Per-outlet energy reset](#what-you-get).
+
 ## Installing
 
 ```sh
